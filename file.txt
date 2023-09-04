@@ -3,42 +3,45 @@ import VanCard from "../components/ui/VanCard";
 import MyModal from "../components/ui/myModal";
 import Spinner from "../components/ui/spinner";
 import { useSearchParams } from "react-router-dom";
-// import localforage from "localforage";
 
 function Vans() {
     const [vans, setVans] = useState([]);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const typeFilter = searchParams.get("type");
+    console.log(typeFilter);
 
     useEffect(() => {
-        console.log("useFetchWorked");
+        console.log(1);
+        setIsLoading(true);
         fetch("/api/vans")
             .then((res) => res.json())
             .then((value) => {
-                setVans(value.vans);
-                // set(value.vans);
+                if (typeFilter) {
+                    const vans = filterVans(typeFilter, value.vans);
+                    setVans(vans);
+                } else {
+                    setVans(value.vans);
+                }
+                setIsLoading(false);
             });
+    }, [typeFilter]);
+
+    useEffect(() => {
+        console.log(2);
     }, []);
 
-    const typeFilteredVans = (vans = [], typeFilter) => {
-        if (typeFilter) {
-            return vans.filter((van) => van.type.toLowerCase() === typeFilter);
-        }
-        return vans;
+    const filterVans = (type, vans = []) => {
+        return vans.filter((van) => van.type === type);
     };
 
-    const filteredVans = typeFilteredVans(vans, typeFilter);
-
-    const handleFilterChange = (key, value) => {
+    const setURLFilter = (type) => {
         setSearchParams((prev) => {
-            if (value === null) {
-                prev.delete(key);
-            } else {
-                prev.set(key, value);
+            if (prev.has("type")) {
+                return prev.set("type", type);
             }
-
-            return prev;
+            return prev.append("type", type);
         });
     };
 
@@ -47,32 +50,28 @@ function Vans() {
             <h2 className="fz_2rem lh_2rem">Explore our van options</h2>
             <div className="vansFilterRow">
                 <span
-                    onClick={() => handleFilterChange("type", "simple")}
+                    onClick={() => setURLFilter("simple")}
                     className="vansFilter"
                 >
                     Simple
                 </span>
                 <span
-                    onClick={() => handleFilterChange("type", "luxury")}
                     className="vansFilter"
+                    onClick={() => setURLFilter("luxury")}
                 >
                     Luxury
                 </span>
                 <span
-                    onClick={() => handleFilterChange("type", "rugged")}
                     className="vansFilter"
+                    onClick={() => setURLFilter("rugged")}
                 >
                     Rugged
                 </span>
-                <span onClick={() => handleFilterChange("type", null)}>
-                    Clear Filters
-                </span>
+                <span>Clear Filters</span>
             </div>
             <div className="vansList">
-                {vans.length !== 0 ? (
-                    filteredVans.map((van) => (
-                        <VanCard key={van.id} van={van} />
-                    ))
+                {!isLoading && vans.length !== 0 ? (
+                    vans.map((van) => <VanCard key={van.id} van={van} />)
                 ) : (
                     <MyModal>
                         <Spinner />
