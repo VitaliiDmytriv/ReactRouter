@@ -2,10 +2,13 @@ import { Link } from "react-router-dom";
 import { setCssClass, makefirstLettUpp } from "../../utils";
 
 /* eslint-disable react/prop-types */
-function VanCard({ van }) {
+function VanCard({ van, searchParams, typeFilter }) {
     return (
         <article className="vanCard fz_1-25rem fw_600">
-            <Link to={`/vans/${van.id}`}>
+            <Link
+                to={van.id}
+                state={{ search: `?${searchParams.toString()}`, typeFilter }}
+            >
                 <div className="vanCard__img">
                     <img src={van.imageUrl} alt="" />
                 </div>

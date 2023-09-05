@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { setCssClass, makefirstLettUpp } from "../utils";
 import arrow from "../assets/leftArrow.svg";
 import MyModal from "./ui/myModal";
@@ -7,6 +7,12 @@ import Spinner from "./ui/spinner";
 
 function VanDetailed() {
     const params = useParams();
+    const location = useLocation();
+    const urlPath = location.state?.search;
+    const direction = location.state.typeFilter
+        ? location.state.typeFilter
+        : "all";
+
     const [van, setVan] = useState(null);
 
     useEffect(() => {
@@ -19,9 +25,13 @@ function VanDetailed() {
         <>
             {van ? (
                 <section className="vanDetailed bodyPage">
-                    <Link to={"/vans"} className="backLink">
+                    <Link
+                        to={`..${urlPath}`}
+                        relative="path"
+                        className="backLink"
+                    >
                         <img src={arrow} alt="" />
-                        Back to all vans
+                        Back to {direction} vans
                     </Link>
                     <div className="vanDetailed__img">
                         <img src={van.imageUrl} alt="" />

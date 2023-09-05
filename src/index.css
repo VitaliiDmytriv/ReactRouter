@@ -83,6 +83,39 @@ img {
     cursor: pointer;
 }
 
+.simple:hover {
+    background-color: #e17654;
+    color: #fff;
+}
+
+.luxury:hover {
+    background-color: #161616;
+    color: #fff;
+}
+.rugged:hover {
+    background-color: #115e59;
+    color: #fff;
+}
+
+.simple.active,
+.luxury.active,
+.rugged.active {
+    color: #fff;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.simple.active {
+    background-color: #e17654;
+}
+
+.luxury.active {
+    background-color: #161616;
+}
+
+.rugged.active {
+    background-color: #115e59;
+}
+
 .mainBtn {
     background-color: #ff8c38;
     text-align: center;
@@ -287,16 +320,6 @@ nav > a:last-of-type {
     transition: all 0.2s;
 }
 
-.vansFilterRow > a:last-of-type {
-    text-decoration: underline;
-}
-
-@media (min-width: 34.375rem) {
-    .vansFilterRow > span:last-of-type {
-        margin-left: auto;
-    }
-}
-
 .vansFilter:hover {
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
@@ -306,6 +329,11 @@ nav > a:last-of-type {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
     gap: 2.24rem;
+}
+
+.vans__clearBtn {
+    cursor: pointer;
+    border-bottom: 2px solid black;
 }
 
 /* ===== */

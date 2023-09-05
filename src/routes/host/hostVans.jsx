@@ -19,10 +19,7 @@ function HostVans() {
                 {vans.length !== 0 ? (
                     vans.map((van) => (
                         <article key={van.id}>
-                            <NavLink
-                                className="hostVans__card"
-                                to={`${van.id}`}
-                            >
+                            <NavLink className="hostVans__card" to={van.id}>
                                 <img src={van.imageUrl} alt="" />
                                 <div className="hostVans__cardInfo">
                                     <h4 className="fz_1-25rem lh_2rem">

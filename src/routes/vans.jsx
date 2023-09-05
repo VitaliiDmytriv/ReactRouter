@@ -3,7 +3,6 @@ import VanCard from "../components/ui/VanCard";
 import MyModal from "../components/ui/myModal";
 import Spinner from "../components/ui/spinner";
 import { useSearchParams } from "react-router-dom";
-// import localforage from "localforage";
 
 function Vans() {
     const [vans, setVans] = useState([]);
@@ -12,12 +11,10 @@ function Vans() {
     const typeFilter = searchParams.get("type");
 
     useEffect(() => {
-        console.log("useFetchWorked");
         fetch("/api/vans")
             .then((res) => res.json())
             .then((value) => {
                 setVans(value.vans);
-                // set(value.vans);
             });
     }, []);
 
@@ -48,30 +45,46 @@ function Vans() {
             <div className="vansFilterRow">
                 <span
                     onClick={() => handleFilterChange("type", "simple")}
-                    className="vansFilter"
+                    className={`vansFilter simple ${
+                        typeFilter === "simple" ? "active" : ""
+                    }`}
                 >
                     Simple
                 </span>
                 <span
                     onClick={() => handleFilterChange("type", "luxury")}
-                    className="vansFilter"
+                    className={`vansFilter luxury ${
+                        typeFilter === "luxury" ? "active" : ""
+                    }`}
                 >
                     Luxury
                 </span>
                 <span
                     onClick={() => handleFilterChange("type", "rugged")}
-                    className="vansFilter"
+                    className={`vansFilter rugged ${
+                        typeFilter === "rugged" ? "active" : ""
+                    }`}
                 >
                     Rugged
                 </span>
-                <span onClick={() => handleFilterChange("type", null)}>
-                    Clear Filters
-                </span>
+                {typeFilter && (
+                    <span
+                        className="vans__clearBtn"
+                        onClick={() => handleFilterChange("type", null)}
+                    >
+                        Clear Filters
+                    </span>
+                )}
             </div>
             <div className="vansList">
                 {vans.length !== 0 ? (
                     filteredVans.map((van) => (
-                        <VanCard key={van.id} van={van} />
+                        <VanCard
+                            key={van.id}
+                            van={van}
+                            typeFilter={typeFilter}
+                            searchParams={searchParams}
+                        />
                     ))
                 ) : (
                     <MyModal>
